@@ -1,0 +1,2 @@
+class SIMPLEMethods:
+    pass
