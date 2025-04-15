@@ -21,7 +21,6 @@ class SIMPLEMethods:
     def calculate_u_field(self):
         for j in range(self.mesh.ny-1):
             for i in range(1,self.mesh.nx):
-                print(f"Calculating u field for node ({j}, {i})")
                 uE_old = self.mesh.u_nodes[j][i+1].u_old
                 uW_old = self.mesh.u_nodes[j][i-1].u_old
                 vUL_old = self.mesh.v_nodes[j+1][i].v_old
