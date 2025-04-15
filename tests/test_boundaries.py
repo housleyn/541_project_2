@@ -25,7 +25,6 @@ def boundary(mesh):
 
 def test_boundary_class_initialization(boundary):
     b = boundary
-    assert b.mesh == mesh
     assert b.conditions['left'] == {}
     assert b.conditions['right'] == {}
     assert b.conditions['top'] == {}

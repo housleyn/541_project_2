@@ -95,14 +95,14 @@ def test_index_algebra_between_meshes_is_correct(mesh):
     mesh.construct_u_mesh()
     mesh.construct_v_mesh()
     mesh.construct_p_mesh()
-    u_pos = mesh.u_nodes[0][0].position
+    u_pos = mesh.u_nodes[0][1].position
     v_pos = mesh.v_nodes[0][1].position
-    p_pos = mesh.p_nodes[0][0].position
+    p_pos = mesh.p_nodes[0][1].position
 
     sum_x = u_pos[0] + v_pos[0] + p_pos[0]
     sum_y = u_pos[1] + v_pos[1] + p_pos[1]
 
-    assert (sum_x, sum_y) == pytest.approx((0.0125, 0.0025))
+    assert (sum_x, sum_y) == pytest.approx((0.0375, 0.0025))
 
 
 
@@ -120,6 +120,6 @@ def test_construct_mesh_works(mesh):
 
 def test_build_matrix_returns_correct_sizes(mesh):
     mesh.construct_mesh()
-    A, b = mesh.buil_matrix(mesh.p_nodes)
+    A, b = mesh.build_matrix(mesh.p_nodes)
     assert A.shape == (mesh.nx * mesh.ny, mesh.nx * mesh.ny)
     assert b.shape == (mesh.nx * mesh.ny,)

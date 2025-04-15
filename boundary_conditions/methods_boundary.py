@@ -22,5 +22,4 @@ class BoundaryMethods:
         self.conditions[side]['u'] = u_value
         self.conditions[side]['v'] = v_value
 
-    def apply_no_slip_wall(self, side):
-        self.apply_velocity_boundary(side, u_value=0.0, v_value=0.0)
+

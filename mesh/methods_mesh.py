@@ -29,7 +29,7 @@ class MeshMethods:
         self.construct_v_mesh()
         self.construct_p_mesh()
         
-    def buil_matrix(self, nodes):
+    def build_matrix(self, nodes):
         rows = len(nodes)
         cols = len(nodes[0])
         N = rows * cols
