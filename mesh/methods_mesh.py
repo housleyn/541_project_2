@@ -54,3 +54,39 @@ class MeshMethods:
                 if j < rows -1:
                     A[k][idx(i,j+1)] = -node.aN
         return A, b
+   
+    def get_boundary_nodes(self, side, field):
+ 
+        if field == 'p':
+            nodes = self.p_nodes
+            nx = self.nx
+            ny = self.ny
+        elif field == 'u':
+            nodes = self.u_nodes
+            nx = self.nx + 1
+            ny = self.ny
+        elif field == 'v':
+            nodes = self.v_nodes
+            nx = self.nx + 2
+            ny = self.ny + 1
+        else:
+            raise ValueError("Invalid field: must be 'p', 'u', or 'v'")
+
+        boundary_nodes = []
+
+        if side == 'left':
+            for j in range(ny):
+                boundary_nodes.append(nodes[j][0])
+        elif side == 'right':
+            for j in range(ny):
+                boundary_nodes.append(nodes[j][-1])
+        elif side == 'bottom':
+            for i in range(nx):
+                boundary_nodes.append(nodes[0][i])
+        elif side == 'top':
+            for i in range(nx):
+                boundary_nodes.append(nodes[-1][i])
+        else:
+            raise ValueError("Invalid side: must be 'left', 'right', 'top', or 'bottom'")
+
+        return boundary_nodes
