@@ -11,26 +11,33 @@ class ControlSurfaceMethods:
         Dn = Ds = mu / dy
 
         if j == 0:
-            self.aS = Ds * dx + max(Fs, 0) * dx
             self.aE = De * dy + max(-Fe, 0) * dy
             self.aW = Dw * dy + max(Fw, 0) * dy
+            Fn = rho / 2 * (vBL_old + vBR_old)
+            Fs = rho / 2 * (vUL_old + vUR_old)
+            self.aS = Ds * dx + max(Fs, 0) * dx
+
             self.aN = Dn * dx + max(-Fn, 0) * dx
-            self.aP = (self.aE + self.aW + self.aN + self.aS + (Fe - Fw) * dy + (Fn - Fs) * dx ) 
-            self.b = (self.aP + mu / dy * dx)*alphau /500
-            self.aS = 0
-            self.aP = (self.aP + mu / dy * dx) / alphau
-            print("bottom wall b =", self.b)
+
+            self.aP = ((self.aE + self.aW + 0 + self.aS + (Fe - Fw) * dy + (Fn - Fs) * dx)+mu*dx/(.5*dy)) /alphau
+            self.b = (((pw - pe) * dy + ((1 - alphau) * self.aP / alphau) * self.u_old))*alphau
+            
+          
 
         elif j == ny - 1:
-            self.aN = Dn * dx + max(-Fn, 0) * dx
             self.aE = De * dy + max(-Fe, 0) * dy
             self.aW = Dw * dy + max(Fw, 0) * dy
-            self.aS = Ds * dx + max(Fs, 0) * dx
-            self.aP = (self.aE + self.aW + self.aN + self.aS + (Fe - Fw) * dy + (Fn - Fs) * dx) 
-            self.b = (self.aP + mu / dy *dx)*alphau /500
-            self.aN = 0
-            self.aP = (self.aP + mu / dy * dx) / alphau
-            print("top wall b =", self.b)
+            Fn = rho / 2 * (vBL_old + vBR_old)
+            Fs = rho / 2 * (vUL_old + vUR_old)
+            self.aN = Dn * dx + max(-Fn, 0) * dx
+
+            self.aS = Dn * dx + max(Fn, 0) * dx
+            self.aP = ((self.aE + self.aW + self.aN + 0 + (Fe - Fw) * dy + (Fn - Fs) * dx)+mu*dx/(.5*dy)) /alphau
+            self.b = (((pw - pe) * dy + ((1 - alphau) * self.aP / alphau) * self.u_old))*alphau
+            
+            
+            
+            
 
         else:
 
@@ -44,17 +51,17 @@ class ControlSurfaceMethods:
 
 
 
-    def calculate_y_coefficients(self, mu, rho, dx, dy, alphav, ps, pn, vN_old, vS_old, uUL_old, uUR_old, uBL_old, uBR_old):
-        # De = Dw = mu/dx 
-        # Dn = Ds = mu/dy
-        # Fe = rho/2 * (uUR_old + uBR_old)
-        # Fw = rho/2 * (uUL_old + uBL_old)
-        # Fn = rho/2 * (vN_old + self.v_old)
-        # Fs = rho/2 * (vS_old + self.v_old)
-        # self.aE = De * dy + max(-Fe, 0)*dy 
-        # self.aW = Dw*dy + max(Fw,0)*dy 
-        # self.aN = Dn*dx + max(-Fn,0)*dx 
-        # self.aS = Ds*dx + max(Fs,0)*dx
-        # self.aP = self.aE + self.aW + self.aN + self.aS + (Fe-Fw)*dy + (Fn-Fs)*dx 
-        # self.b = (ps-pn)*dx + ((1-alphav)*self.aP/alphav)*self.v_old
-        pass
+    def calculate_y_coefficients(self, mu, rho, dx, dy, alphav, ps, pn, vN_old, vS_old, uUL, uUR, uBL, uBR):
+        
+        Fe = rho / 2 * (uUR + uBR)
+        Fw = rho / 2 * (uUL + uBL)
+        Fn = rho / 2 * (self.v_old + vN_old)
+        Fs = rho / 2 * (self.v_old + vS_old)
+        De = Dw = mu / dx
+        Dn = Ds = mu / dy
+        self.aE = De * dy + max(-Fe, 0) * dy
+        self.aW = Dw * dy + max(Fw, 0) * dy
+        self.aN = Dn * dx + max(-Fn, 0) * dx
+        self.aS = Ds * dx + max(Fs, 0) * dx
+        self.aP = (self.aE + self.aW + self.aN + self.aS + (Fe - Fw) * dy + (Fn - Fs) * dx)/alphav
+        self.b = ((ps - pn) * dx + ((1 - alphav) * self.aP / alphav) * self.v_old)*alphav

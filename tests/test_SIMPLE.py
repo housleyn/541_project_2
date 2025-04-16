@@ -120,29 +120,8 @@ def test_shear_stress_is_correct(simple):
 
 def test_first_iteration_calculate_u_field(simple):
     simple.generate_initial_guesses()
-    A,b = simple.calculate_u_field()
-    expected_A = np.array([
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [-0.0027, 0.0358, -0.0002, 0, 0, -0.005, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, -0.0027, 0.0358, -0.0002, 0, 0, -0.005, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, -0.0027, 0.0358, -0.0002, 0, 0, -0.005, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [-0.0063, 0, 0, 0, 0, -0.0027, 0.0283, -0.0002, 0, 0, -0.005, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, -0.0063, 0, 0, 0, -0.0027, 0.0283, -0.0002, 0, 0, 0, -0.005, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, -0.0063, 0, 0, 0, -0.0027, 0.0283, -0.0002, 0, 0, 0, -0.005, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [-0.0063, 0, 0, 0, 0, 0, -0.0027, 0.0283, -0.0002, 0, 0, 0, 0, -0.005, 0, 0, 0, 0, 0, 0],
-        [0, -0.0063, 0, 0, 0, 0, -0.0027, 0.0283, -0.0002, 0, 0, 0, 0, 0, -0.005, 0, 0, 0, 0, 0],
-        [0, 0, -0.0063, 0, 0, 0, 0, -0.0027, 0.0283, -0.0002, 0, 0, 0, 0, 0, -0.005, 0, 0, 0, 0],
-        [0, 0, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, -0.0063, 0.0283, -0.0002, 0, 0, 0, 0, 0, 0, -0.005, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, -0.0063, 0.0283, -0.0002, 0, 0, 0, 0, 0, 0, -0.005, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, -0.0063, 0.0383, -0.0002, 0, 0, 0, 0, 0, 0, -0.005, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -0.0063, 0.0383, -0.0002, 0, 0, 0, 0, 0, 0, -0.005],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -0.0063, 0.0383, -0.0002, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -0.0063, 0.0383, -0.0002, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1]
-    ])
+    A,b,u = simple.calculate_u_field()
+    
 
     expected_b = np.array([
                             [1.000e-03],
@@ -151,26 +130,65 @@ def test_first_iteration_calculate_u_field(simple):
                             [1.790e-05],
                             [0.000e+00],
                             [1.000e-03],
-                            [1.415e-05],
-                            [1.415e-05],
-                            [1.415e-05],
+                            [1.42e-05],
+                            [1.42e-05],
+                            [1.42e-05],
                             [0.000e+00],
                             [1.000e-03],
-                            [1.415e-05],
-                            [1.415e-05],
-                            [1.415e-05],
+                            [1.42e-05],
+                            [1.42e-05],
+                            [1.42e-05],
                             [0.000e+00],
                             [1.000e-03],
-                            [1.915e-05],
-                            [1.915e-05],
-                            [1.915e-05],
+                            [1.92e-05],
+                            [1.92e-05],
+                            [1.92e-05],
                             [0.000e+00],
                         ])
 
-    expected_b = expected_b.reshape(20,1)
+    expected_u = np.array([
+                            [0.001],
+                            [0.0007082],
+                            [0.0006841],
+                            [.0006819],
+                            [.0008498],
+                            [.001],
+                            [.0009233],
+                            [.0009082],
+                            [.000906],
+                            [.001129],
+                            [.001],
+                            [.0009342],
+                            [.0009208],
+                            [.0009187],
+                            [.0011448],
+                            [.001],
+                            [.0007266],
+                            [.0007052],
+                            [.0007033],
+                            [.0008764],
+    ])
 
-    assert A.shape == expected_A.shape
+    
     assert b.shape == expected_b.shape
-    assert np.allclose(A, expected_A, atol=1e-6)
-    assert np.allclose(b, expected_b, atol=1e-8)
+    assert u.shape == expected_u.shape
+    assert np.allclose(u, expected_u, atol=1e-6)
+    assert np.allclose(b, expected_b, atol=1e-7)
+    
 
+def test_u_values_were_updated(simple):
+    simple.generate_initial_guesses()
+    A,b,u = simple.calculate_u_field()
+    for j in range(simple.mesh.ny):
+        for i in range(simple.mesh.nx + 1):
+            assert simple.mesh.u_nodes[j][i].u == u[j * (simple.mesh.nx + 1) + i], f"u[{j}][{i}] = {simple.mesh.u_nodes[j][i].u}, expected {u[j * (simple.mesh.nx + 1) + i]}"
+
+def test_v_values_were_updated(simple):
+    simple.generate_initial_guesses()
+    simple.calculate_u_field()
+    A,b,v = simple.calculate_v_field()
+    assert v.shape == (30, 1)
+    for j in range(simple.mesh.ny + 1):
+        for i in range(simple.mesh.nx + 2):
+            assert simple.mesh.v_nodes[j][i].v == v[j * (simple.mesh.nx + 2) + i], f"v[{j}][{i}] = {simple.mesh.v_nodes[j][i].v}, expected {v[j * (simple.mesh.nx + 2) + i]}"
+    

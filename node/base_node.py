@@ -9,5 +9,6 @@ class NodeBase():
         self.p = 0.0
         self.p_old = 0.0
         self.position = None
+        self.p_prime = 0.0
 
     

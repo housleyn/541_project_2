@@ -42,7 +42,6 @@ class MeshMethods:
         
         for j in range(rows):
             for i in range(cols):
-                # print(f"Building matrix for node ({j}, {i})")
                 node = nodes[j][i]
                 k = idx(i,j)
                 A[k][k] = node.aP
