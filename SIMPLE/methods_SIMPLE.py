@@ -151,8 +151,8 @@ class SIMPLEMethods:
         b=b.reshape(-1,1)
         p_prime = np.linalg.solve(A, b)
         np.set_printoptions(precision=7, suppress=True, linewidth=200)
-        print("p_prime Vector:")
-        print(p_prime)
+        
+        
         for j in range(self.mesh.ny):
             for i in range(self.mesh.nx):
                 self.mesh.p_nodes[j][i].p_prime = p_prime[j * (self.mesh.nx) + i]
@@ -165,7 +165,7 @@ class SIMPLEMethods:
                 self.mesh.p_nodes[j][i].p_old = self.mesh.p_nodes[j][i].p
     def calculate_new_u_field(self):
         for j in range(self.mesh.ny):
-            for i in range(1,self.mesh.nx+1):
+            for i in range(1,self.mesh.nx):
                 pE = self.mesh.p_nodes[j][i].p
                 pW = self.mesh.p_nodes[j][i-1].p
                 d = self.mesh.dy  / (self.mesh.u_nodes[j][i].aP)
@@ -183,6 +183,7 @@ class SIMPLEMethods:
     def run(self):
         self.generate_initial_guesses()
         while self.iteration < self.max_iterations:
+            print(f"Iteration: {self.iteration}")
             self.calculate_u_field()
             self.calculate_v_field()
             self.calculate_p_prime_field()

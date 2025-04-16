@@ -26,4 +26,6 @@ m = Material()
 m.rho = 1000
 m.mu = .001
 
-mesh.plot_nodes_with_indices()
+simulation = SIMPLE(mesh, b, m)
+simulation.max_iterations = 1000
+simulation.run()
