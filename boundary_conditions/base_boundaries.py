@@ -20,5 +20,4 @@ class BoundaryBase:
         self.conditions['top']['v'] = None
         self.conditions['bottom']['u'] = None
         self.conditions['bottom']['v'] = None
-        
     

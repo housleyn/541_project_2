@@ -16,12 +16,12 @@ def test_control_surface_initialization(control_surface):
     assert control_surface.u_old == 1.0
     assert control_surface.v_old == 2.0
     assert control_surface.position is None
-    assert control_surface.b ==0.0
-    assert control_surface.aE ==0.0
-    assert control_surface.aW ==0.0
-    assert control_surface.aN ==0.0
-    assert control_surface.aS ==0.0
-    assert control_surface.aP ==0.0
+    assert control_surface.b is None
+    assert control_surface.aE is None
+    assert control_surface.aW is None
+    assert control_surface.aN ==None
+    assert control_surface.aS is None
+    assert control_surface.aP is None
 
 def test_given_control_surface_methods(control_surface):
     assert hasattr(control_surface, 'calculate_x_coefficients')
@@ -42,9 +42,11 @@ def test_calculate_x_coefficients(control_surface):
     vUR_old = 0.5
     vBL_old = 0.5
     vBR_old = 0.5
+    i=1
+    nx=4
 
     cs.calculate_x_coefficients(mu, rho, dx, dy, alphau, pe, pw,
-                                 uE_old, uW_old, vUL_old, vUR_old, vBL_old, vBR_old)
+                                 uE_old, uW_old, vUL_old, vUR_old, vBL_old, vBR_old,i,nx)
 
     # Validate coefficient structure
     assert cs.aE >= 0

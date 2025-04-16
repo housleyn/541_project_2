@@ -1,6 +1,7 @@
 from node import Node
 from control_surfaces import ControlSurface
 import numpy as np
+import matplotlib.pyplot as plt
 
 class MeshMethods:
     def construct_u_mesh(self):
@@ -41,6 +42,7 @@ class MeshMethods:
         
         for j in range(rows):
             for i in range(cols):
+                print(f"Building matrix for node ({j}, {i})")
                 node = nodes[j][i]
                 k = idx(i,j)
                 A[k][k] = node.aP
@@ -90,3 +92,32 @@ class MeshMethods:
             raise ValueError("Invalid side: must be 'left', 'right', 'top', or 'bottom'")
 
         return boundary_nodes
+    
+    
+
+    def plot_nodes_with_indices(self):
+        def extract_coords(nodes):
+            return [(n.position[0], n.position[1], i, j) 
+                    for j, row in enumerate(nodes) for i, n in enumerate(row)]
+
+        p_coords = extract_coords(self.p_nodes)
+        u_coords = extract_coords(self.u_nodes)
+        v_coords = extract_coords(self.v_nodes)
+
+        plt.figure(figsize=(10, 10))
+        for x, y, i, j in p_coords:
+            plt.plot(x, y, 'ro')
+            plt.text(x, y, f'({j},{i})', color='r', fontsize=8)
+        for x, y, i, j in u_coords:
+            plt.plot(x, y, 'bo')
+            plt.text(x, y, f'({j},{i})', color='b', fontsize=8)
+        for x, y, i, j in v_coords:
+            plt.plot(x, y, 'go')
+            plt.text(x, y, f'({j},{i})', color='g', fontsize=8)
+
+        plt.title("Mesh Nodes with Indices (Red=p, Blue=u, Green=v)")
+        plt.xlabel("x")
+        plt.ylabel("y")
+        plt.axis("equal")
+        plt.grid(True)
+        plt.show()

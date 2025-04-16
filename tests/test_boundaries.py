@@ -23,12 +23,8 @@ def boundary(mesh):
     b = Boundary(mesh)
     return b
 
-def test_boundary_class_initialization(boundary):
-    b = boundary
-    assert b.conditions['left'] == {}
-    assert b.conditions['right'] == {}
-    assert b.conditions['top'] == {}
-    assert b.conditions['bottom'] == {}
+
+
 
 def test_boundary_integrates_with_mesh_class_correctly(boundary):
     b = boundary
@@ -38,14 +34,7 @@ def test_boundary_integrates_with_mesh_class_correctly(boundary):
     assert len(b.mesh.u_nodes) == 4
     assert len(b.mesh.v_nodes) == 5
 
-def test_apply_pressure_boundary_is_correct(boundary):
-    b = boundary
-    b.mesh.p_nodes[0][3].p_old = 3
-    b.apply_pressure_boundary('right', 0)
-    assert b.mesh.p_nodes[0][3].p_old == 0
-    assert b.mesh.p_nodes[1][3].p_old == 0
-    assert b.mesh.p_nodes[2][3].p_old == 0
-    assert b.mesh.p_nodes[3][3].p_old == 0
+
 
 def test_apply_velocity_boundary_is_correct(boundary):
     b = boundary

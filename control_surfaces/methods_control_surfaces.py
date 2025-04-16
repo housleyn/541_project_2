@@ -1,12 +1,25 @@
 class ControlSurfaceMethods: 
   
-    def calculate_x_coefficients(self, mu, rho, dx, dy , alphau, pe, pw, uE_old, uW_old, vUL_old, vUR_old, vBL_old, vBR_old,i):
+    def calculate_x_coefficients(self, mu, rho, dx, dy , alphau, pe, pw, uE_old, uW_old, vUL_old, vUR_old, vBL_old, vBR_old,i,nx):
 
         if i ==0:
             self.b = .001
             self.aP = 1
+            self.aE = 0
+            self.aW = 0
+            self.aN = 0
+            self.aS = 0
             return
-
+        elif i == nx+1:
+            self.b = 0
+            self.aP = 1
+            self.aE = 0
+            self.aW = 1
+            self.aN = 0
+            self.aS = 0
+            self.b = 0
+            return
+        
         Fe = rho/2 * (uE_old + self.u_old)
         Fw = rho/2 * (uW_old + self.u_old)
         Fn = rho/2 * (vUL_old + vUR_old)
