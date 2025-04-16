@@ -5,6 +5,10 @@ from mesh import Mesh
 from boundary_conditions import Boundary
 from material import Material
 from SIMPLE import SIMPLE
+from plotting import (
+    extract_pressure_grid, plot_filled_contour, plot_pressure_centerline, plot_convergence,
+    extract_u_velocity_grid, extract_v_velocity_grid
+)
 
 d = Domain()
 d.define_lower_boundary(lambda x, y: 0)
@@ -12,7 +16,7 @@ d.define_upper_boundary(lambda x, y: .01)
 d.define_left_boundary(lambda y, x=None: 0)
 d.define_right_boundary(lambda y, x=None: .05)
 
-mesh = Mesh(d, 4, 4)
+mesh = Mesh(d, 50, 50)
 mesh.construct_mesh()
 
 b = Boundary(mesh)
@@ -27,5 +31,17 @@ m.rho = 1000
 m.mu = .001
 
 simulation = SIMPLE(mesh, b, m)
+simulation.alphau = simulation.alphav = simulation.alpha_p = 0.5
+
 simulation.max_iterations = 1000
 simulation.run()
+
+X, Y, P = extract_pressure_grid(mesh)
+plot_filled_contour(X, Y, P, title="Pressure Field")
+
+Xu, Yu, U = extract_u_velocity_grid(mesh)
+plot_filled_contour(Xu, Yu, U, title="U Velocity Field")
+
+Xv, Yv, V = extract_v_velocity_grid(mesh)
+plot_filled_contour(Xv, Yv, V, title="V Velocity Field")
+

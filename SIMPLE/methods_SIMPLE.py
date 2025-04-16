@@ -143,16 +143,24 @@ class SIMPLEMethods:
                 dW = self.mesh.dy * self.alphav / aW
                 dN = self.mesh.dx * self.alphau / aN
                 dS = self.mesh.dx * self.alphau / aS
+        
 
-
-                self.mesh.p_nodes[j][i].define_pressure_correction_coefficients( self.rho, self.mesh.dx, self.mesh.dy,  uE, uW, vN, vS, dE, dW, dN, dS)
+                self.mesh.p_nodes[j][i].define_pressure_correction_coefficients( self.rho, self.mesh.dx, self.mesh.dy,  uE, uW, vN, vS, dE, dW, dN, dS,i,j,self.mesh.nx,self.mesh.ny)
+        for j in range(self.mesh.ny):
+            self.mesh.p_nodes[j][self.mesh.nx-1].aE = 0
+            self.mesh.p_nodes[j][self.mesh.nx-1].aW = 0
+            self.mesh.p_nodes[j][self.mesh.nx-1].aN = 0
+            self.mesh.p_nodes[j][self.mesh.nx-1].aS = 0
+            self.mesh.p_nodes[j][self.mesh.nx-1].aP = 1 
+            self.mesh.p_nodes[j][self.mesh.nx-1].b = 0
+           
                 
         A,b = self.mesh.build_matrix(self.mesh.p_nodes)
         b=b.reshape(-1,1)
         p_prime = np.linalg.solve(A, b)
         np.set_printoptions(precision=7, suppress=True, linewidth=200)
-        
-        
+
+        print(p_prime)
         for j in range(self.mesh.ny):
             for i in range(self.mesh.nx):
                 self.mesh.p_nodes[j][i].p_prime = p_prime[j * (self.mesh.nx) + i]
@@ -161,7 +169,7 @@ class SIMPLEMethods:
     def calculate_p_field(self):
         for j in range(self.mesh.ny):
             for i in range(self.mesh.nx):
-                self.mesh.p_nodes[j][i].p = self.mesh.p_nodes[j][i].p_old + self.alphap*self.mesh.p_nodes[j][i].p_prime
+                self.mesh.p_nodes[j][i].p = self.mesh.p_nodes[j][i].p_old + self.mesh.p_nodes[j][i].p_prime
                 self.mesh.p_nodes[j][i].p_old = self.mesh.p_nodes[j][i].p
     def calculate_new_u_field(self):
         for j in range(self.mesh.ny):

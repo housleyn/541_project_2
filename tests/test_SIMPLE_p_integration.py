@@ -74,5 +74,62 @@ def test_p_near_wall(simple):
     assert p.aS == pytest.approx(.078125, rel=1e-2)
     assert p.aP == pytest.approx(6.1547552, rel=1e-2)
 
+def test_p_prime_values(simple):
+    s = simple 
+    p = s.mesh.p_nodes[0][0]
+    assert p.p_prime.item() == pytest.approx(.00344, rel=1e-2)
 
+def test_p_new(simple):
+    s = simple
+    s.calculate_p_field()
+    p = s.mesh.p_nodes[0][0]
+    assert p.p.item() == pytest.approx(.00444, rel=1e-2)
+def test_p_new_2(simple):
+    s = simple
+    s.calculate_p_field()
+    p = s.mesh.p_nodes[1][1]
+    assert p.p.item() == pytest.approx(.003147, rel=1e-2)
+
+def test_p_new_3(simple):
+    s = simple
+    s.calculate_p_field()
+    p = s.mesh.p_nodes[1][0]
+    assert p.p.item() == pytest.approx(.004559, rel=1e-2)
+def test_p_prime(simple):
+    s = simple
+    p = s.mesh.p_nodes[3][0]
+    assert p.p_prime.item() == pytest.approx(.00389, rel=1e-2)
+
+def test_p_prime_2(simple):
+    s = simple
+    p = s.mesh.p_nodes[2][0]
+    assert p.p_prime.item() == pytest.approx(.00372, rel=1e-2)
+
+
+
+
+def test_p_new_4(simple):
+    s = simple
+    s.calculate_p_field()
+    p = s.mesh.p_nodes[3][0]
+    assert p.p.item() == pytest.approx(.00489, rel=1e-2)
+
+def test_p_new_5(simple):
+    s = simple
+    s.calculate_p_field()
+    p = s.mesh.p_nodes[3][1]
+    assert p.p == pytest.approx(.00348, rel=1e-2)
+
+def test_p_new_6(simple):
+    s = simple
+    s.calculate_p_field()
+    p = s.mesh.p_nodes[2][3]
+    assert p.p.item() == pytest.approx(.001, rel=1e-2)
+
+def test_u_new(simple):
+    s = simple
+    s.calculate_p_field()
+    s.calculate_new_u_field()
+    u = s.mesh.u_nodes[0][0]
+    assert u.u.item() == pytest.approx(.001, rel=1e-2)
     
