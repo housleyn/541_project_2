@@ -50,9 +50,11 @@ class SIMPLEMethods:
         A,b = self.mesh.build_matrix(self.mesh.u_nodes)
         # b = np.flipud(b)
         b = np.flipud(b.reshape((4, 5))).flatten().reshape((20, 1))
-        # print("A", A)
+        A = np.flip(A, axis=(0,1))
+        print("A", A)
         print("b", b)
-        print('b shape', b.shape)
+        # print('b shape', b.shape)
+        
         
         # u_new = np.linalg.solve(A, b)
         # for j in range(self.mesh.ny):

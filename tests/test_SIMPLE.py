@@ -169,8 +169,8 @@ def test_first_iteration_calculate_u_field(simple):
 
     expected_b = expected_b.reshape(20,1)
 
-    # assert A.shape == expected_A.shape
+    assert A.shape == expected_A.shape
     assert b.shape == expected_b.shape
-    # assert np.allclose(A, expected_A, atol=1e-6)
+    assert np.allclose(A, expected_A, atol=1e-6)
     assert np.allclose(b, expected_b, atol=1e-8)
 

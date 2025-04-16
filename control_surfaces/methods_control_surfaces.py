@@ -15,8 +15,10 @@ class ControlSurfaceMethods:
             self.aE = De * dy + max(-Fe, 0) * dy
             self.aW = Dw * dy + max(Fw, 0) * dy
             self.aN = Dn * dx + max(-Fn, 0) * dx
-            self.aP = self.aE + self.aW + self.aN + self.aS + (Fe - Fw) * dy + (Fn - Fs) * dx 
-            self.b = (self.aP + mu / dy * dx) /1000
+            self.aP = (self.aE + self.aW + self.aN + self.aS + (Fe - Fw) * dy + (Fn - Fs) * dx ) 
+            self.b = (self.aP + mu / dy * dx)*alphau /500
+            self.aS = 0
+            self.aP = (self.aP + mu / dy * dx) / alphau
             print("bottom wall b =", self.b)
 
         elif j == ny - 1:
@@ -24,9 +26,10 @@ class ControlSurfaceMethods:
             self.aE = De * dy + max(-Fe, 0) * dy
             self.aW = Dw * dy + max(Fw, 0) * dy
             self.aS = Ds * dx + max(Fs, 0) * dx
-            self.aP = self.aE + self.aW + self.aN + self.aS + (Fe - Fw) * dy + (Fn - Fs) * dx 
-            self.b = (self.aP + mu / dy *dx) /1000
+            self.aP = (self.aE + self.aW + self.aN + self.aS + (Fe - Fw) * dy + (Fn - Fs) * dx) 
+            self.b = (self.aP + mu / dy *dx)*alphau /500
             self.aN = 0
+            self.aP = (self.aP + mu / dy * dx) / alphau
             print("top wall b =", self.b)
 
         else:
@@ -36,8 +39,8 @@ class ControlSurfaceMethods:
             self.aN = Dn * dx + max(-Fn, 0) * dx
             self.aS = Ds * dx + max(Fs, 0) * dx
 
-            self.aP = self.aE + self.aW + self.aN + self.aS + (Fe - Fw) * dy + (Fn - Fs) * dx
-            self.b = (pw - pe) * dy + ((1 - alphau) * self.aP / alphau) * self.u_old
+            self.aP = (self.aE + self.aW + self.aN + self.aS + (Fe - Fw) * dy + (Fn - Fs) * dx)/alphau
+            self.b = ((pw - pe) * dy + ((1 - alphau) * self.aP / alphau) * self.u_old)*alphau
 
 
 
