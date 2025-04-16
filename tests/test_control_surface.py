@@ -15,15 +15,13 @@ def test_control_surface_initialization(control_surface):
     assert control_surface.v is None
     assert control_surface.u_old == 1.0
     assert control_surface.v_old == 2.0
-    assert control_surface.orientation is None
-    assert control_surface.area is None
     assert control_surface.position is None
-    assert control_surface.b is None
-    assert control_surface.aE is None
-    assert control_surface.aW is None
-    assert control_surface.aN is None
-    assert control_surface.aS is None
-    assert control_surface.aP is None
+    assert control_surface.b ==0.0
+    assert control_surface.aE ==0.0
+    assert control_surface.aW ==0.0
+    assert control_surface.aN ==0.0
+    assert control_surface.aS ==0.0
+    assert control_surface.aP ==0.0
 
 def test_given_control_surface_methods(control_surface):
     assert hasattr(control_surface, 'calculate_x_coefficients')

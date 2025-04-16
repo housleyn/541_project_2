@@ -2,14 +2,12 @@ class ControlSurfaceBase:
     def __init__(self):
         self.u = None
         self.v = None
-        self.orientation = None
-        self.area = None
         self.position = None
-        self.b = None
-        self.aE = None 
-        self.aW = None
-        self.aN = None
-        self.aS = None
-        self.aP = None
-        self.u_old = None
-        self.v_old = None
+        self.b = 0.0
+        self.aE = 0.0 
+        self.aW = 0.0
+        self.aN = 0.0
+        self.aS = 0.0
+        self.aP = 0.0
+        self.u_old = 0.0
+        self.v_old = 0.0

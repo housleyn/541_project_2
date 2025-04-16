@@ -1,11 +1,5 @@
 class BoundaryMethods:
     def apply_pressure_boundary(self, side, value):
-        nodes = self.mesh.get_boundary_nodes(side, 'p')
-        for node in nodes:
-            node.p_old= node.p = value
-            node.aP = 1
-            node.aE = node.aW = 0
-            node.b = value
         self.conditions[side]['pressure'] = value
 
     def apply_velocity_boundary(self, side, u_value=None, v_value=None):
