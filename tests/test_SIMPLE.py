@@ -99,55 +99,78 @@ def test_simple_generate_initial_guesses(simple):
     assert simple.mesh.p_nodes[0][0].p_old == 0.001
     assert simple.mesh.u_nodes[0][4].u_old == .001
 
-# def test_if_last_column_initialized_with_coefficient_values(simple):
-#     simple.generate_initial_guesses()
-#     simple.calculate_u_field()
-#     assert simple.mesh.u_nodes[0][4] is not None
-#     assert simple.mesh.u_nodes[0][4].u_old is not None
-#     assert simple.mesh.u_nodes[0][4].aW is not None
-#     assert simple.mesh.u_nodes[0][4].aE is not None
-#     assert simple.mesh.u_nodes[0][4].aN is not None
-#     assert simple.mesh.u_nodes[0][4].aS is not None
-#     assert simple.mesh.u_nodes[0][4].aP is not None
+def test_if_last_column_initialized_with_coefficient_values(simple):
+    simple.generate_initial_guesses()
+    simple.calculate_u_field()
+    assert simple.mesh.u_nodes[0][4] is not None
+    assert simple.mesh.u_nodes[0][4].u_old is not None
+    assert simple.mesh.u_nodes[0][4].aW is not None
+    assert simple.mesh.u_nodes[0][4].aE is not None
+    assert simple.mesh.u_nodes[0][4].aN is not None
+    assert simple.mesh.u_nodes[0][4].aS is not None
+    assert simple.mesh.u_nodes[0][4].aP is not None
+
+def test_shear_stress_is_correct(simple):
+    assert simple.mesh.dx == 0.0125
+    assert simple.mesh.dy == 0.0025
+    assert simple.mu == 0.001
+    assert (simple.mu / simple.mesh.dy) * simple.mesh.dx == pytest.approx(0.005)
 
 
 
+def test_first_iteration_calculate_u_field(simple):
+    simple.generate_initial_guesses()
+    A,b = simple.calculate_u_field()
+    expected_A = np.array([
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [-0.0027, 0.0358, -0.0002, 0, 0, -0.005, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, -0.0027, 0.0358, -0.0002, 0, 0, -0.005, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, -0.0027, 0.0358, -0.0002, 0, 0, -0.005, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [-0.0063, 0, 0, 0, 0, -0.0027, 0.0283, -0.0002, 0, 0, -0.005, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, -0.0063, 0, 0, 0, -0.0027, 0.0283, -0.0002, 0, 0, 0, -0.005, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, -0.0063, 0, 0, 0, -0.0027, 0.0283, -0.0002, 0, 0, 0, -0.005, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [-0.0063, 0, 0, 0, 0, 0, -0.0027, 0.0283, -0.0002, 0, 0, 0, 0, -0.005, 0, 0, 0, 0, 0, 0],
+        [0, -0.0063, 0, 0, 0, 0, -0.0027, 0.0283, -0.0002, 0, 0, 0, 0, 0, -0.005, 0, 0, 0, 0, 0],
+        [0, 0, -0.0063, 0, 0, 0, 0, -0.0027, 0.0283, -0.0002, 0, 0, 0, 0, 0, -0.005, 0, 0, 0, 0],
+        [0, 0, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, -0.0063, 0.0283, -0.0002, 0, 0, 0, 0, 0, 0, -0.005, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, -0.0063, 0.0283, -0.0002, 0, 0, 0, 0, 0, 0, -0.005, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, -0.0063, 0.0383, -0.0002, 0, 0, 0, 0, 0, 0, -0.005, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -0.0063, 0.0383, -0.0002, 0, 0, 0, 0, 0, 0, -0.005],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -0.0063, 0.0383, -0.0002, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -0.0063, 0.0383, -0.0002, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1]
+    ])
 
+    expected_b = np.array([
+                            [1.000e-03],
+                            [1.790e-05],
+                            [1.790e-05],
+                            [1.790e-05],
+                            [0.000e+00],
+                            [1.000e-03],
+                            [1.415e-05],
+                            [1.415e-05],
+                            [1.415e-05],
+                            [0.000e+00],
+                            [1.000e-03],
+                            [1.415e-05],
+                            [1.415e-05],
+                            [1.415e-05],
+                            [0.000e+00],
+                            [1.000e-03],
+                            [1.915e-05],
+                            [1.915e-05],
+                            [1.915e-05],
+                            [0.000e+00],
+                        ])
 
-# def test_first_iteration_calculate_u_field(simple):
-#     simple.generate_initial_guesses()
-#     A,b = simple.calculate_u_field()
-#     expected_A = np.array([
-#         [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-#         [-0.0027, 0.0358, -0.0002, 0, 0, -0.005, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-#         [0, -0.0027, 0.0358, -0.0002, 0, 0, -0.005, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-#         [0, 0, -0.0027, 0.0358, -0.0002, 0, 0, -0.005, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-#         [0, 0, 0, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-#         [-0.0063, 0, 0, 0, 0, -0.0027, 0.0283, -0.0002, 0, 0, -0.005, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-#         [0, -0.0063, 0, 0, 0, -0.0027, 0.0283, -0.0002, 0, 0, 0, -0.005, 0, 0, 0, 0, 0, 0, 0, 0],
-#         [0, 0, -0.0063, 0, 0, 0, -0.0027, 0.0283, -0.0002, 0, 0, 0, -0.005, 0, 0, 0, 0, 0, 0, 0],
-#         [0, 0, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-#         [-0.0063, 0, 0, 0, 0, 0, -0.0027, 0.0283, -0.0002, 0, 0, 0, 0, -0.005, 0, 0, 0, 0, 0, 0],
-#         [0, -0.0063, 0, 0, 0, 0, -0.0027, 0.0283, -0.0002, 0, 0, 0, 0, 0, -0.005, 0, 0, 0, 0, 0],
-#         [0, 0, -0.0063, 0, 0, 0, 0, -0.0027, 0.0283, -0.0002, 0, 0, 0, 0, 0, -0.005, 0, 0, 0, 0],
-#         [0, 0, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-#         [0, 0, 0, 0, 0, 0, 0, -0.0063, 0.0283, -0.0002, 0, 0, 0, 0, 0, 0, -0.005, 0, 0, 0],
-#         [0, 0, 0, 0, 0, 0, 0, 0, -0.0063, 0.0283, -0.0002, 0, 0, 0, 0, 0, 0, -0.005, 0, 0],
-#         [0, 0, 0, 0, 0, 0, 0, 0, 0, -0.0063, 0.0383, -0.0002, 0, 0, 0, 0, 0, 0, -0.005, 0],
-#         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -0.0063, 0.0383, -0.0002, 0, 0, 0, 0, 0, 0, -0.005],
-#         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -0.0063, 0.0383, -0.0002, 0, 0, 0, 0, 0, 0],
-#         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -0.0063, 0.0383, -0.0002, 0, 0, 0, 0, 0],
-#         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1]
-#     ])
+    expected_b = expected_b.reshape(20,1)
 
-#     expected_b = np.array([
-#         0.001, 1.79E-5, 1.79E-5, 1.79E-5, 0.0,
-#         0.001, 1.42E-5, 1.42E-5, 1.42E-5, 0.0,
-#         0.001, 1.42E-5, 1.42E-5, 1.42E-5, 0.0,
-#         0.001, 1.92E-5, 1.92E-5, 1.92E-5, 0.0
-#     ])
+    # assert A.shape == expected_A.shape
+    assert b.shape == expected_b.shape
+    # assert np.allclose(A, expected_A, atol=1e-6)
+    assert np.allclose(b, expected_b, atol=1e-8)
 
-#     assert A.shape == expected_A.shape
-#     assert b.shape == expected_b.shape
-#     # assert np.allclose(A, expected_A, atol=1e-6)
-#     assert np.allclose(b, expected_b, atol=1e-8)
