@@ -160,7 +160,7 @@ class SIMPLEMethods:
         p_prime = np.linalg.solve(A, b)
         np.set_printoptions(precision=7, suppress=True, linewidth=200)
 
-        print(p_prime)
+        
         for j in range(self.mesh.ny):
             for i in range(self.mesh.nx):
                 self.mesh.p_nodes[j][i].p_prime = p_prime[j * (self.mesh.nx) + i]

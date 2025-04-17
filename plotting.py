@@ -81,21 +81,7 @@ def extract_v_velocity_grid(mesh):
                 V[j, i] = node.v
     return X, Y, V
 
-def plot_pressure_centerline(X, Y, P):
-    x_vals = np.linspace(X.min(), X.max(), 200)
-    y_center = 0.5 * (Y.min() + Y.max())
-    points = np.column_stack((X.flatten(), Y.flatten()))
-    values = P.flatten()
-    centerline_pressure = griddata(points, values, (x_vals, np.full_like(x_vals, y_center)))
 
-    plt.figure()
-    plt.plot(x_vals, centerline_pressure, '-o')
-    plt.xlabel('X')
-    plt.ylabel('Pressure')
-    plt.title(f'Pressure Along Channel Centerline (y = {y_center:.4f})')
-    plt.grid(True)
-    plt.tight_layout()
-    plt.show()
 
 def plot_convergence(residuals):
     plt.figure()
@@ -108,3 +94,45 @@ def plot_convergence(residuals):
     plt.grid(True)
     plt.tight_layout()
     plt.show()
+
+def plot_mass_flow_convergence(mass_flow_log, x_target=0.025, save=True):
+    import matplotlib.pyplot as plt
+
+    plt.figure(figsize=(8, 5))
+    plt.plot(range(len(mass_flow_log)), mass_flow_log, marker='o', linewidth=2)
+    plt.xlabel("Iteration")
+    plt.ylabel("Mass Flow at x = {:.3f} (kg/s)".format(x_target))
+    plt.title("Mass Flow Rate Convergence")
+    plt.grid(True)
+
+    
+    plt.savefig("mass_flow_convergence.png")
+    
+
+
+
+
+
+from plotting import extract_pressure_grid
+
+def plot_pressure_centerline(mesh, y_target=0.005, save=True):
+    from plotting import extract_pressure_grid
+    X, Y, P = extract_pressure_grid(mesh)
+
+    # Find closest row to y_target
+    idx_row = np.argmin(np.abs(Y[:, 0] - y_target))
+    x_line = X[idx_row, :]
+    p_line = P[idx_row, :]
+
+    plt.figure()
+    plt.plot(x_line, p_line, marker='o')
+    plt.xlabel("X (m)")
+    plt.ylabel("Pressure (Pa)")
+    plt.title(f"Pressure Along y = {Y[idx_row,0]:.5f} (Closest to {y_target})")
+    plt.grid(True)
+    
+    plt.savefig("pressure_vs_x_centerline.png")
+    # plt.show()
+
+
+
